@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+import { buildSeoMetadata } from "@/components/seo";
+
+export const metadata: Metadata = buildSeoMetadata({
+  title: "About Us",
+  description:
+    "Learn how NextCommerce focuses on fast discovery, clean shopping flows, and customer-centered design.",
+  path: "/about-us",
+});
+
 export default function AboutUs() {
   return (
       <div className="py-32">

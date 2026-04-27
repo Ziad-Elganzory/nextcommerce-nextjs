@@ -19,6 +19,9 @@ type LoginResponse = {
   refresh_token: string;
 };
 
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL?.trim() || "https://api.escuelajs.co/api/v1";
+
 const initialState: AuthState = {
   accessToken: null,
   refreshToken: null,
@@ -32,7 +35,7 @@ export const login = createAsyncThunk<LoginResponse, LoginPayload, { rejectValue
   "auth/login",
   async (credentials, thunkApi) => {
     try {
-      const response = await fetch("https://api.escuelajs.co/api/v1/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

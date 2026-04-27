@@ -1,7 +1,9 @@
+import type { Metadata } from "next";
 import FilterBar from "@/components/filterBar";
 import HomeLoadGate from "@/components/homeLoadGate";
 import Pagination from "@/components/pagination";
 import ProductCard from "@/components/productCard";
+import { buildSeoMetadata } from "@/components/seo";
 import { redirect } from "next/navigation";
 
 type ApiProduct = {
@@ -33,6 +35,15 @@ type HomeProps = {
 };
 
 const PRODUCTS_PER_PAGE = 12;
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL?.trim() || "https://api.escuelajs.co/api/v1";
+
+export const metadata: Metadata = buildSeoMetadata({
+  title: "Home",
+  description:
+    "Browse products, apply filters, and add your favorite items to cart on NextCommerce.",
+  path: "/",
+});
 
 export default async function Home({ searchParams }: HomeProps) {
   const resolvedSearchParams = (await searchParams) ?? {};
@@ -66,7 +77,7 @@ export default async function Home({ searchParams }: HomeProps) {
       params.set("price_max", max);
     }
 
-    return `https://api.escuelajs.co/api/v1/products?${params.toString()}`;
+    return `${API_BASE_URL}/products?${params.toString()}`;
   };
 
   const retryParams = new URLSearchParams();
@@ -126,7 +137,7 @@ export default async function Home({ searchParams }: HomeProps) {
     });
 
   const categorySourceProducts: ApiProduct[] = await fetch(
-    "https://api.escuelajs.co/api/v1/products?offset=0&limit=9999",
+    `${API_BASE_URL}/products?offset=0&limit=9999`,
     { next: { revalidate: 300 } },
   )
     .then(async (response) => {
