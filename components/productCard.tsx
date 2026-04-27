@@ -1,9 +1,11 @@
 "use client";
 
+import { addToCart } from "@/store/features/cart/cartSlice";
+import { useAppDispatch } from "@/store/hooks";
+
 type ProductCardProps = {
   id: number;
   title: string;
-  slug: string;
   price: number;
   description: string;
   category: string;
@@ -11,7 +13,9 @@ type ProductCardProps = {
   hoverImage: string;
 };
 
-export default function ProductCard({ id, title, slug, price, description, category, image, hoverImage }: ProductCardProps) {
+export default function ProductCard({ id, title, price, description, category, image, hoverImage }: ProductCardProps) {
+  const dispatch = useAppDispatch();
+
   return (
     <article className="w-full max-w-72 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-all">
       <div className="group relative overflow-hidden rounded-t-2xl">
@@ -34,7 +38,16 @@ export default function ProductCard({ id, title, slug, price, description, categ
 
         <button
           type="button"
-          onClick={() => console.log(`Add to cart: ${id} - ${slug}`)}
+          onClick={() =>
+            dispatch(
+              addToCart({
+                id,
+                title,
+                price,
+                image,
+              }),
+            )
+          }
           className="mt-3 w-full rounded-full bg-indigo-500 text-white py-2.5 hover:bg-indigo-600 active:scale-[0.98] transition-all"
           aria-label={`Add ${title} to cart`}
         >

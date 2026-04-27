@@ -10,10 +10,12 @@ import CartDialog from "@/components/cartDialog";
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
-    const cartCount = 3;
     const router = useRouter();
     const dispatch = useAppDispatch();
     const { isAuthenticated } = useAppSelector((state) => state.auth);
+    const cartCount = useAppSelector((state) =>
+        state.cart.items.reduce((sum, item) => sum + item.quantity, 0)
+    );
 
     const handleLogout = () => {
         dispatch(logout());
@@ -22,12 +24,6 @@ export default function Navbar() {
 
     return (
         <div className="text-sm text-white w-full">
-            <div className="text-center font-medium py-2 bg-gradient-to-r from-violet-500 via-[#9938CA] to-[#E0724A]">
-                <p>
-                    Exclusive Price Drop! Hurry,{" "}
-                    <span className="underline underline-offset-2">Offer Ends Soon!</span>
-                </p>
-            </div>
 
             <nav className="relative h-[70px] flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 bg-white text-gray-900 transition-all shadow">
                 <Link href="/">
