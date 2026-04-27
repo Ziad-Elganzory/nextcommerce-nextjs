@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { logout } from "@/store/features/auth/authSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import CartDialog from "@/components/cartDialog";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isCartOpen, setIsCartOpen] = useState(false);
     const cartCount = 3;
     const router = useRouter();
     const dispatch = useAppDispatch();
@@ -38,8 +40,9 @@ export default function Navbar() {
                 </ul>
 
                 <div className="hidden md:flex items-center gap-4 ml-20">
-                    <Link
-                        href="/cart"
+                    <button
+                        type="button"
+                        onClick={() => setIsCartOpen(true)}
                         aria-label={`Cart with ${cartCount} items`}
                         className="relative inline-flex items-center justify-center h-10 w-10 rounded-full border border-gray-300 hover:bg-gray-50 transition-all active:scale-95"
                     >
@@ -56,7 +59,7 @@ export default function Navbar() {
                         <span className="absolute -top-1 -right-1 min-w-5 h-5 px-1 rounded-full bg-indigo-600 text-white text-[11px] font-semibold flex items-center justify-center leading-none">
                             {cartCount}
                         </span>
-                    </Link>
+                    </button>
 
                     {isAuthenticated ? (
                         <button
@@ -94,12 +97,19 @@ export default function Navbar() {
                         <li><Link href="/" className="text-sm">Home</Link></li>
                         <li><Link href="/about-us" className="text-sm">About Us</Link></li>
                         <li>
-                            <Link href="/cart" className="text-sm inline-flex items-center gap-2">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setIsCartOpen(true);
+                                    setIsMenuOpen(false);
+                                }}
+                                className="text-sm inline-flex items-center gap-2"
+                            >
                                 Cart
                                 <span className="min-w-5 h-5 px-1 rounded-full bg-indigo-600 text-white text-[11px] font-semibold flex items-center justify-center leading-none">
                                     {cartCount}
                                 </span>
-                            </Link>
+                            </button>
                         </li>
                     </ul>
 
@@ -118,6 +128,7 @@ export default function Navbar() {
                     )}
                 </div>
             </nav>
+            <CartDialog isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
         </div>
     );
 }
