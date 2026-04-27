@@ -1,12 +1,22 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { logout } from "@/store/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const cartCount = 3;
+    const router = useRouter();
+    const dispatch = useAppDispatch();
+    const { isAuthenticated } = useAppSelector((state) => state.auth);
+
+    const handleLogout = () => {
+        dispatch(logout());
+        router.push("/login");
+    };
 
     return (
         <div className="text-sm text-white w-full">
@@ -48,9 +58,19 @@ export default function Navbar() {
                         </span>
                     </Link>
 
-                    <button className="bg-white hover:bg-gray-50 border border-gray-300 px-9 py-2 rounded-full active:scale-95 transition-all">
-                        <Link href={"/login"}>Login</Link>
-                    </button>
+                    {isAuthenticated ? (
+                        <button
+                            type="button"
+                            onClick={handleLogout}
+                            className="bg-white hover:bg-gray-50 border border-gray-300 px-9 py-2 rounded-full active:scale-95 transition-all"
+                        >
+                            Logout
+                        </button>
+                    ) : (
+                        <button className="bg-white hover:bg-gray-50 border border-gray-300 px-9 py-2 rounded-full active:scale-95 transition-all">
+                            <Link href={"/login"}>Login</Link>
+                        </button>
+                    )}
                 </div>
 
                 <button
@@ -83,9 +103,19 @@ export default function Navbar() {
                         </li>
                     </ul>
 
-                    <button type="button" className="bg-white text-gray-600 border border-gray-300 mt-6 text-sm hover:bg-gray-50 active:scale-95 transition-all w-40 h-11 rounded-full">
-                        <Link href={"/login"}>Login</Link>
-                    </button>
+                    {isAuthenticated ? (
+                        <button
+                            type="button"
+                            onClick={handleLogout}
+                            className="bg-white text-gray-700 border border-gray-300 mt-6 text-sm hover:bg-gray-50 active:scale-95 transition-all w-40 h-11 rounded-full"
+                        >
+                            Logout
+                        </button>
+                    ) : (
+                        <button type="button" className="bg-white text-gray-600 border border-gray-300 mt-6 text-sm hover:bg-gray-50 active:scale-95 transition-all w-40 h-11 rounded-full">
+                            <Link href={"/login"}>Login</Link>
+                        </button>
+                    )}
                 </div>
             </nav>
         </div>
